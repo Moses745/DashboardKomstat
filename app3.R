@@ -45,6 +45,16 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
+  color: #2C3E50 !important;
+}
+
+/* Ensure all text is visible */
+p, span, div, h1, h2, h3, h4, h5, h6, label, li {
+  color: inherit !important;
+}
+
+.jumbotron p {
+  color: #495057 !important;
 }
 
 /* Navigation bar styling */
@@ -88,12 +98,21 @@ body {
 
 /* Card styling */
 .panel, .well {
-  background: white;
+  background: white !important;
   border: none !important;
   border-radius: var(--border-radius) !important;
   box-shadow: var(--card-shadow);
   margin-bottom: 20px;
   overflow: hidden;
+  color: #2C3E50 !important;
+}
+
+.panel-body {
+  color: #2C3E50 !important;
+}
+
+.panel-body p, .panel-body span, .panel-body div {
+  color: #495057 !important;
 }
 
 .panel-heading {
@@ -106,6 +125,11 @@ body {
 
 .panel-body {
   padding: 20px !important;
+  color: #2C3E50 !important;
+}
+
+.panel-body * {
+  color: inherit !important;
 }
 
 /* Jumbotron styling */
@@ -120,16 +144,14 @@ body {
 }
 
 .jumbotron h1 {
-  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #2E86AB !important;
   font-weight: 700;
   margin-bottom: 20px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
 }
 
 .jumbotron h3 {
-  color: var(--dark-text);
+  color: var(--dark-text) !important;
   font-weight: 600;
   margin-bottom: 15px;
 }
@@ -253,13 +275,14 @@ body {
 
 /* Verbatim output styling */
 .shiny-text-output {
-  background: white;
+  background: white !important;
   border-radius: var(--border-radius);
   box-shadow: var(--card-shadow);
   padding: 20px;
   margin: 10px 0;
   font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
   border-left: 4px solid var(--primary-color);
+  color: #2C3E50 !important;
 }
 
 /* Tab styling */
@@ -364,6 +387,31 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--secondary-color);
 }
+
+/* Fix for any remaining transparency issues */
+.container-fluid * {
+  color: inherit !important;
+}
+
+.jumbotron * {
+  color: inherit !important;
+}
+
+/* Specific fixes for text elements */
+strong, b {
+  color: inherit !important;
+  font-weight: 600 !important;
+}
+
+/* List styling */
+ul li, ol li {
+  color: #495057 !important;
+}
+
+/* Icon colors */
+.fa, .fas, .far, .fab {
+  color: inherit !important;
+}
 </style>
 "
 
@@ -398,7 +446,7 @@ ui <- navbarPage(
         div(class = "jumbotron",
           HTML("<i class='fas fa-chart-line fa-3x' style='color: #2E86AB; margin-bottom: 20px;'></i>"),
           h1("Dashboard Analisis Statistik Terpadu", 
-             style = "background: linear-gradient(45deg, #2E86AB, #A23B72); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"),
+             style = "color: #2E86AB; font-weight: 700; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);"),
           hr(style = "border-color: #2E86AB; border-width: 2px;"),
           h3(HTML("<i class='fa fa-star'></i> Selamat Datang di DAST"), 
              style = "color: #2C3E50; font-weight: 600;"),
