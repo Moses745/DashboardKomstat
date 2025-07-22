@@ -44,8 +44,9 @@ custom_css <- "
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
   color: #2C3E50 !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 /* Ensure all text is visible */
@@ -62,6 +63,8 @@ p, span, div, h1, h2, h3, h4, h5, h6, label, li {
   background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%) !important;
   border: none !important;
   box-shadow: var(--card-shadow);
+  margin-bottom: 0 !important;
+  border-radius: 0 !important;
 }
 
 .navbar-brand {
@@ -72,19 +75,23 @@ p, span, div, h1, h2, h3, h4, h5, h6, label, li {
 }
 
 .navbar-nav > li > a {
-  color: rgba(255,255,255,0.9) !important;
-  font-weight: 500 !important;
+  color: white !important;
+  font-weight: 600 !important;
   transition: all 0.3s ease;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
 }
 
 .navbar-nav > li > a:hover {
   color: white !important;
-  background-color: rgba(255,255,255,0.1) !important;
+  background-color: rgba(255,255,255,0.2) !important;
   border-radius: 4px;
+  transform: translateY(-1px);
 }
 
-.navbar-nav > li.active > a {
-  background-color: rgba(255,255,255,0.2) !important;
+.navbar-nav > li.active > a,
+.navbar-nav > li.active > a:hover,
+.navbar-nav > li.active > a:focus {
+  background-color: rgba(255,255,255,0.3) !important;
   color: white !important;
   border-radius: 4px;
 }
@@ -92,8 +99,7 @@ p, span, div, h1, h2, h3, h4, h5, h6, label, li {
 /* Container and content styling */
 .container-fluid {
   background: var(--light-bg);
-  min-height: calc(100vh - 50px);
-  padding: 20px;
+  padding: 15px;
 }
 
 /* Card styling */
@@ -102,7 +108,7 @@ p, span, div, h1, h2, h3, h4, h5, h6, label, li {
   border: none !important;
   border-radius: var(--border-radius) !important;
   box-shadow: var(--card-shadow);
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   overflow: hidden;
   color: #2C3E50 !important;
 }
@@ -124,7 +130,7 @@ p, span, div, h1, h2, h3, h4, h5, h6, label, li {
 }
 
 .panel-body {
-  padding: 20px !important;
+  padding: 15px !important;
   color: #2C3E50 !important;
 }
 
@@ -138,8 +144,8 @@ p, span, div, h1, h2, h3, h4, h5, h6, label, li {
   border-radius: var(--border-radius) !important;
   box-shadow: var(--card-shadow);
   border: none !important;
-  padding: 40px;
-  margin-bottom: 30px;
+  padding: 30px 20px;
+  margin: 15px 0 20px 0;
   text-align: center;
 }
 
@@ -316,7 +322,14 @@ p, span, div, h1, h2, h3, h4, h5, h6, label, li {
 
 /* Row spacing */
 .row {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+}
+
+/* Tab content styling */
+.tab-content {
+  background: transparent !important;
+  padding: 0 !important;
+  margin-top: 10px;
 }
 
 /* Icon styling */
@@ -412,6 +425,48 @@ ul li, ol li {
 .fa, .fas, .far, .fab {
   color: inherit !important;
 }
+
+/* Fix navbar menu text visibility */
+.navbar-nav a, .navbar-brand {
+  color: white !important;
+  opacity: 1 !important;
+  text-decoration: none !important;
+}
+
+.navbar-nav li a {
+  color: white !important;
+  font-weight: 600 !important;
+  padding: 10px 15px !important;
+}
+
+/* Remove any conflicting styles */
+.navbar-default .navbar-nav > li > a {
+  color: white !important;
+}
+
+/* Compact layout fixes */
+.navbar-collapse {
+  padding: 0 !important;
+}
+
+/* Remove excessive spacing */
+.tab-pane {
+  padding-top: 10px !important;
+}
+
+/* Bootstrap navbar fixes */
+.navbar-nav {
+  margin: 0 !important;
+}
+
+.navbar {
+  min-height: 50px !important;
+}
+
+/* Content spacing */
+.container-fluid > .row:first-child {
+  margin-top: 0 !important;
+}
 </style>
 "
 
@@ -464,7 +519,7 @@ ui <- navbarPage(
             h4("Metadata Dataset", style = "display: inline; margin-left: 10px;")
           ),
           div(class = "panel-body",
-            div(style = "background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px; border-radius: 8px; margin-bottom: 15px;",
+            div(style = "background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 15px; border-radius: 8px; margin-bottom: 12px;",
               h5(HTML("<i class='fa fa-info-circle'></i> Informasi Dataset:"), 
                  style = "color: #2E86AB; font-weight: 600;"),
               tags$ul(style = "list-style-type: none; padding-left: 0;",
@@ -494,36 +549,36 @@ ui <- navbarPage(
             h4("Fitur Utama DAST", style = "display: inline; margin-left: 10px;")
           ),
           div(class = "panel-body",
-            div(style = "display: grid; gap: 15px;",
-              div(style = "display: flex; align-items: start; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #2E86AB;",
+                         div(style = "display: grid; gap: 10px;",
+                             div(style = "display: flex; align-items: start; padding: 12px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #2E86AB;",
                 HTML("<i class='fa fa-tools fa-2x' style='color: #2E86AB; margin-right: 15px; margin-top: 5px;'></i>"),
                 div(
                   strong("Manajemen Data:"), 
                   p("Transformasi data kontinyu ke kategorik dengan interpretasi otomatis", style = "margin: 5px 0 0 0; color: #495057;")
                 )
               ),
-              div(style = "display: flex; align-items: start; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #6A994E;",
+                             div(style = "display: flex; align-items: start; padding: 12px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #6A994E;",
                 HTML("<i class='fa fa-search fa-2x' style='color: #6A994E; margin-right: 15px; margin-top: 5px;'></i>"),
                 div(
                   strong("Eksplorasi Data:"), 
                   p("Statistik deskriptif, visualisasi interaktif, dan pemetaan geografis", style = "margin: 5px 0 0 0; color: #495057;")
                 )
               ),
-              div(style = "display: flex; align-items: start; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #F18F01;",
+                             div(style = "display: flex; align-items: start; padding: 12px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #F18F01;",
                 HTML("<i class='fa fa-check-double fa-2x' style='color: #F18F01; margin-right: 15px; margin-top: 5px;'></i>"),
                 div(
                   strong("Uji Asumsi:"), 
                   p("Pengujian normalitas dan homogenitas dengan berbagai metode", style = "margin: 5px 0 0 0; color: #495057;")
                 )
               ),
-              div(style = "display: flex; align-items: start; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #A23B72;",
+                             div(style = "display: flex; align-items: start; padding: 12px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #A23B72;",
                 HTML("<i class='fa fa-calculator fa-2x' style='color: #A23B72; margin-right: 15px; margin-top: 5px;'></i>"),
                 div(
                   strong("Statistik Inferensia:"), 
                   p("Uji t, uji proporsi, uji varians, dan ANOVA", style = "margin: 5px 0 0 0; color: #495057;")
                 )
               ),
-              div(style = "display: flex; align-items: start; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #C73E1D;",
+                             div(style = "display: flex; align-items: start; padding: 12px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #C73E1D;",
                 HTML("<i class='fa fa-chart-line fa-2x' style='color: #C73E1D; margin-right: 15px; margin-top: 5px;'></i>"),
                 div(
                   strong("Regresi Linear:"), 
@@ -544,7 +599,7 @@ ui <- navbarPage(
             h4("Panduan Penggunaan", style = "display: inline; margin-left: 10px;")
           ),
           div(class = "panel-body",
-            div(style = "display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;",
+                         div(style = "display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;",
               div(style = "text-align: center; padding: 20px;",
                 HTML("<div style='background: linear-gradient(45deg, #2E86AB, #6A994E); color: white; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; font-size: 24px; font-weight: bold;'>1</div>"),
                 h5("Manajemen Data", style = "color: #2E86AB;"),
@@ -571,10 +626,10 @@ ui <- navbarPage(
       )
     ),
     
-    hr(style = "border-color: #2E86AB; border-width: 2px; margin: 40px 0;"),
+         hr(style = "border-color: #2E86AB; border-width: 2px; margin: 20px 0;"),
     fluidRow(
       column(12, style = "text-align: center;",
-        div(style = "background: linear-gradient(135deg, white 0%, #f8f9fa 100%); padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);",
+                  div(style = "background: linear-gradient(135deg, white 0%, #f8f9fa 100%); padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);",
           HTML("<i class='fa fa-download fa-3x' style='color: #2E86AB; margin-bottom: 20px;'></i>"),
           h4("Download Laporan Lengkap", style = "color: #2C3E50; margin-bottom: 20px;"),
           downloadButton("download_full_report", 
