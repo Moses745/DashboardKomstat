@@ -1,4 +1,4 @@
-# app.R - Dashboard Analisis Statistik Terpadu (DAST) - Enhanced Version
+# app.R - Dashboard Analisis Statistik Terpadu (DAST) - Enhanced Modern Version
 
 # Load the required libraries
 library(shiny)
@@ -20,294 +20,949 @@ library(kableExtra) # For better tables
 library(Cairo) # For better graphics output
 library(officer) # For creating Word documents
 library(flextable) # For beautiful tables in Word
+# library(shinydashboard) # For better dashboard layout
+# library(shinyWidgets) # For enhanced widgets
+# library(bslib) # For modern Bootstrap themes
+
+# Custom CSS for modern styling
+custom_css <- "
+<style>
+/* Modern color palette and typography */
+:root {
+  --primary-color: #2E86AB;
+  --secondary-color: #A23B72;
+  --success-color: #F18F01;
+  --warning-color: #C73E1D;
+  --info-color: #6A994E;
+  --light-bg: #F8F9FA;
+  --dark-text: #2C3E50;
+  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --border-radius: 8px;
+}
+
+/* Global styling */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+/* Navigation bar styling */
+.navbar {
+  background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%) !important;
+  border: none !important;
+  box-shadow: var(--card-shadow);
+}
+
+.navbar-brand {
+  font-weight: 700 !important;
+  font-size: 1.4em !important;
+  color: white !important;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.navbar-nav > li > a {
+  color: rgba(255,255,255,0.9) !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease;
+}
+
+.navbar-nav > li > a:hover {
+  color: white !important;
+  background-color: rgba(255,255,255,0.1) !important;
+  border-radius: 4px;
+}
+
+.navbar-nav > li.active > a {
+  background-color: rgba(255,255,255,0.2) !important;
+  color: white !important;
+  border-radius: 4px;
+}
+
+/* Container and content styling */
+.container-fluid {
+  background: var(--light-bg);
+  min-height: calc(100vh - 50px);
+  padding: 20px;
+}
+
+/* Card styling */
+.panel, .well {
+  background: white;
+  border: none !important;
+  border-radius: var(--border-radius) !important;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.panel-heading {
+  background: linear-gradient(45deg, var(--primary-color), var(--info-color)) !important;
+  color: white !important;
+  border: none !important;
+  padding: 15px 20px !important;
+  font-weight: 600;
+}
+
+.panel-body {
+  padding: 20px !important;
+}
+
+/* Jumbotron styling */
+.jumbotron {
+  background: linear-gradient(135deg, white 0%, #f8f9fa 100%);
+  border-radius: var(--border-radius) !important;
+  box-shadow: var(--card-shadow);
+  border: none !important;
+  padding: 40px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.jumbotron h1 {
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.jumbotron h3 {
+  color: var(--dark-text);
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+/* Button styling */
+.btn {
+  border-radius: var(--border-radius) !important;
+  font-weight: 500 !important;
+  padding: 10px 20px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  border: none !important;
+}
+
+.btn-primary {
+  background: linear-gradient(45deg, var(--primary-color), var(--info-color)) !important;
+}
+
+.btn-success {
+  background: linear-gradient(45deg, var(--info-color), var(--success-color)) !important;
+}
+
+.btn-warning {
+  background: linear-gradient(45deg, var(--success-color), var(--warning-color)) !important;
+}
+
+.btn-info {
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)) !important;
+}
+
+.btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+}
+
+/* Sidebar styling */
+.col-sm-4 .well, .col-sm-3 .well {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  padding: 20px;
+}
+
+/* Form control styling */
+.form-control {
+  border-radius: var(--border-radius) !important;
+  border: 2px solid #e9ecef !important;
+  transition: all 0.3s ease !important;
+}
+
+.form-control:focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 0.2rem rgba(46, 134, 171, 0.25) !important;
+}
+
+.form-group label {
+  font-weight: 600 !important;
+  color: var(--dark-text) !important;
+}
+
+/* Select input styling */
+.selectize-control .selectize-input {
+  border-radius: var(--border-radius) !important;
+  border: 2px solid #e9ecef !important;
+}
+
+.selectize-control .selectize-input.focus {
+  border-color: var(--primary-color) !important;
+}
+
+/* Table styling */
+.dataTables_wrapper {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  padding: 20px;
+  margin: 10px 0;
+}
+
+.table {
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.table thead th {
+  background: linear-gradient(45deg, var(--primary-color), var(--info-color));
+  color: white;
+  border: none;
+  font-weight: 600;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(46, 134, 171, 0.1);
+}
+
+/* Plot containers */
+.shiny-plot-output, .plotly {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  padding: 15px;
+  margin: 10px 0;
+}
+
+/* Alert styling */
+.alert {
+  border-radius: var(--border-radius) !important;
+  border: none !important;
+  box-shadow: var(--card-shadow) !important;
+}
+
+.alert-info {
+  background: linear-gradient(45deg, rgba(46, 134, 171, 0.1), rgba(106, 153, 78, 0.1)) !important;
+  color: var(--primary-color) !important;
+}
+
+.alert-warning {
+  background: linear-gradient(45deg, rgba(199, 62, 29, 0.1), rgba(241, 143, 1, 0.1)) !important;
+  color: var(--warning-color) !important;
+}
+
+/* Verbatim output styling */
+.shiny-text-output {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  padding: 20px;
+  margin: 10px 0;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  border-left: 4px solid var(--primary-color);
+}
+
+/* Tab styling */
+.nav-tabs {
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.nav-tabs > li > a {
+  border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+  color: var(--dark-text) !important;
+  font-weight: 500;
+}
+
+.nav-tabs > li.active > a {
+  background: linear-gradient(45deg, var(--primary-color), var(--info-color)) !important;
+  color: white !important;
+  border: none !important;
+}
+
+/* Leaflet map styling */
+.leaflet-container {
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+}
+
+/* Progress bars and loading */
+.shiny-spinner-container {
+  background: rgba(255,255,255,0.9);
+  border-radius: var(--border-radius);
+}
+
+/* Row spacing */
+.row {
+  margin-bottom: 20px;
+}
+
+/* Icon styling */
+.fa, .glyphicon {
+  margin-right: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .jumbotron {
+    padding: 20px;
+  }
+  
+  .jumbotron h1 {
+    font-size: 2rem;
+  }
+  
+  .container-fluid {
+    padding: 10px;
+  }
+}
+
+/* Animation classes */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Hover effects */
+.panel:hover {
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+/* Status indicators */
+.status-indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.status-success { background-color: var(--info-color); }
+.status-warning { background-color: var(--success-color); }
+.status-danger { background-color: var(--warning-color); }
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-color);
+}
+</style>
+"
 
 # --- Define the User Interface (UI) ---
 ui <- navbarPage(
-  "DAST - Dashboard Analisis Statistik Terpadu",
+  title = HTML("<i class='fa fa-chart-line'></i> DAST - Dashboard Analisis Statistik Terpadu"),
+  # theme = bs_theme(
+  #   version = 5,
+  #   bootswatch = "flatly",
+  #   primary = "#2E86AB",
+  #   secondary = "#A23B72",
+  #   success = "#6A994E",
+  #   info = "#2E86AB",
+  #   warning = "#F18F01",
+  #   danger = "#C73E1D"
+  # ),
+  
+  # Add custom CSS
+  tags$head(
+    tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"),
+    HTML(custom_css)
+  ),
   
   # --- 1. Beranda (Home) Menu ---
-  tabPanel("Beranda",
-           fluidRow(
-             column(12,
-                    div(class = "jumbotron",
-                        h1("Dashboard Analisis Statistik Terpadu (DAST)", 
-                           style = "color: #2c3e50; text-align: center;"),
-                        hr(),
-                        h3("Selamat Datang di DAST", style = "color: #34495e;"),
-                        p("Dashboard Analisis Statistik Terpadu (DAST) adalah platform komprehensif yang dirancang khusus untuk mempermudah eksplorasi, analisis, dan interpretasi data statistik dengan fokus pada kerentanan sosial dan analisis multivariat.", 
-                          style = "font-size: 16px; text-align: justify;")
-                    )
-             )
-           ),
-           
-           fluidRow(
-             column(6,
-                    div(class = "panel panel-primary",
-                        div(class = "panel-heading", h4("Metadata Dataset")),
-                        div(class = "panel-body",
-                            h5("Informasi Dataset:"),
-                            tags$ul(
-                              tags$li("Nama Dataset: Social Vulnerability Index (SoVI) Data"),
-                              tags$li("Jumlah Observasi: 515 kabupaten/kota"),
-                              tags$li("Jumlah Variabel: 16 variabel utama"),
-                              tags$li("Periode Data: Data terkini kerentanan sosial Indonesia"),
-                              tags$li("Sumber: Badan Pusat Statistik dan instansi terkait")
-                            ),
-                            h5("Variabel Utama:"),
-                            tags$ul(
-                              tags$li("CHILDREN: Persentase anak-anak"),
-                              tags$li("ELDERLY: Persentase lansia"),
-                              tags$li("POVERTY: Tingkat kemiskinan"),
-                              tags$li("EDUCATION: Tingkat pendidikan rendah"),
-                              tags$li("Dan 12 variabel lainnya")
-                            )
-                        )
-                    )
-             ),
-             column(6,
-                    div(class = "panel panel-success",
-                        div(class = "panel-heading", h4("Fitur Utama DAST")),
-                        div(class = "panel-body",
-                            tags$ul(
-                              tags$li(strong("Manajemen Data:"), " Transformasi data kontinyu ke kategorik dengan interpretasi otomatis"),
-                              tags$li(strong("Eksplorasi Data:"), " Statistik deskriptif, visualisasi interaktif, dan pemetaan geografis"),
-                              tags$li(strong("Uji Asumsi:"), " Pengujian normalitas dan homogenitas dengan berbagai metode"),
-                              tags$li(strong("Statistik Inferensia:"), " Uji t, uji proporsi, uji varians, dan ANOVA"),
-                              tags$li(strong("Regresi Linear:"), " Analisis regresi berganda dengan uji asumsi lengkap"),
-                              tags$li(strong("Download Fleksibel:"), " Ekspor hasil dalam format JPG, PDF, dan Word")
-                            )
-                        )
-                    )
-             )
-           ),
-           
-           fluidRow(
-             column(12,
-                    div(class = "panel panel-info",
-                        div(class = "panel-heading", h4("Panduan Penggunaan")),
-                        div(class = "panel-body",
-                            p("1. Mulai dengan", strong("Manajemen Data"), "untuk mempersiapkan dataset sesuai kebutuhan analisis"),
-                            p("2. Lakukan", strong("Eksplorasi Data"), "untuk memahami karakteristik dan distribusi data"),
-                            p("3. Jalankan", strong("Uji Asumsi"), "sebelum melakukan analisis inferensia"),
-                            p("4. Pilih metode", strong("Statistik Inferensia"), "yang sesuai dengan tujuan penelitian"),
-                            p("5. Gunakan", strong("Regresi Linear"), "untuk analisis hubungan antar variabel"),
-                            p("6. Unduh hasil analisis dalam berbagai format untuk dokumentasi dan presentasi")
-                        )
-                    )
-             )
-           ),
-           
-           hr(),
-           fluidRow(
-             column(12, style = "text-align: center;",
-                    h4("Download Laporan Lengkap"),
-                    downloadButton("download_full_report", "Download Laporan Lengkap (Word)", 
-                                   class = "btn-primary btn-lg", style = "margin: 10px;")
-             )
-           )
+  tabPanel(
+    title = HTML("<i class='fa fa-home'></i> Beranda"),
+    value = "home",
+    class = "fade-in",
+    
+    fluidRow(
+      column(12,
+        div(class = "jumbotron",
+          HTML("<i class='fas fa-chart-line fa-3x' style='color: #2E86AB; margin-bottom: 20px;'></i>"),
+          h1("Dashboard Analisis Statistik Terpadu", 
+             style = "background: linear-gradient(45deg, #2E86AB, #A23B72); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"),
+          hr(style = "border-color: #2E86AB; border-width: 2px;"),
+          h3(HTML("<i class='fa fa-star'></i> Selamat Datang di DAST"), 
+             style = "color: #2C3E50; font-weight: 600;"),
+          p("Dashboard Analisis Statistik Terpadu (DAST) adalah platform komprehensif yang dirancang khusus untuk mempermudah eksplorasi, analisis, dan interpretasi data statistik dengan fokus pada kerentanan sosial dan analisis multivariat.", 
+            style = "font-size: 16px; text-align: justify; color: #495057; line-height: 1.6;")
+        )
+      )
+    ),
+    
+    fluidRow(
+      column(6,
+        div(class = "panel panel-primary",
+          div(class = "panel-heading", 
+            HTML("<i class='fa fa-database'></i>"),
+            h4("Metadata Dataset", style = "display: inline; margin-left: 10px;")
+          ),
+          div(class = "panel-body",
+            div(style = "background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px; border-radius: 8px; margin-bottom: 15px;",
+              h5(HTML("<i class='fa fa-info-circle'></i> Informasi Dataset:"), 
+                 style = "color: #2E86AB; font-weight: 600;"),
+              tags$ul(style = "list-style-type: none; padding-left: 0;",
+                tags$li(HTML("<i class='fa fa-check-circle' style='color: #6A994E;'></i> <strong>Nama Dataset:</strong> Social Vulnerability Index (SoVI) Data")),
+                tags$li(HTML("<i class='fa fa-check-circle' style='color: #6A994E;'></i> <strong>Jumlah Observasi:</strong> 515 kabupaten/kota")),
+                tags$li(HTML("<i class='fa fa-check-circle' style='color: #6A994E;'></i> <strong>Jumlah Variabel:</strong> 16 variabel utama")),
+                tags$li(HTML("<i class='fa fa-check-circle' style='color: #6A994E;'></i> <strong>Periode Data:</strong> Data terkini kerentanan sosial Indonesia")),
+                tags$li(HTML("<i class='fa fa-check-circle' style='color: #6A994E;'></i> <strong>Sumber:</strong> Badan Pusat Statistik dan instansi terkait"))
+              )
+            ),
+            h5(HTML("<i class='fa fa-list'></i> Variabel Utama:"), 
+               style = "color: #2E86AB; font-weight: 600;"),
+            div(style = "display: grid; grid-template-columns: 1fr 1fr; gap: 10px;",
+              tags$div(HTML("<i class='fa fa-child' style='color: #F18F01;'></i> <strong>CHILDREN:</strong> Persentase anak-anak")),
+              tags$div(HTML("<i class='fa fa-user' style='color: #F18F01;'></i> <strong>ELDERLY:</strong> Persentase lansia")),
+              tags$div(HTML("<i class='fa fa-dollar-sign' style='color: #F18F01;'></i> <strong>POVERTY:</strong> Tingkat kemiskinan")),
+              tags$div(HTML("<i class='fa fa-graduation-cap' style='color: #F18F01;'></i> <strong>EDUCATION:</strong> Tingkat pendidikan rendah")),
+              tags$div(HTML("<i class='fa fa-ellipsis-h' style='color: #F18F01;'></i> <strong>Dan 12 variabel lainnya</strong>"))
+            )
+          )
+        )
+      ),
+      column(6,
+        div(class = "panel panel-success",
+          div(class = "panel-heading", 
+            HTML("<i class='fa fa-cogs'></i>"),
+            h4("Fitur Utama DAST", style = "display: inline; margin-left: 10px;")
+          ),
+          div(class = "panel-body",
+            div(style = "display: grid; gap: 15px;",
+              div(style = "display: flex; align-items: start; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #2E86AB;",
+                HTML("<i class='fa fa-tools fa-2x' style='color: #2E86AB; margin-right: 15px; margin-top: 5px;'></i>"),
+                div(
+                  strong("Manajemen Data:"), 
+                  p("Transformasi data kontinyu ke kategorik dengan interpretasi otomatis", style = "margin: 5px 0 0 0; color: #495057;")
+                )
+              ),
+              div(style = "display: flex; align-items: start; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #6A994E;",
+                HTML("<i class='fa fa-search fa-2x' style='color: #6A994E; margin-right: 15px; margin-top: 5px;'></i>"),
+                div(
+                  strong("Eksplorasi Data:"), 
+                  p("Statistik deskriptif, visualisasi interaktif, dan pemetaan geografis", style = "margin: 5px 0 0 0; color: #495057;")
+                )
+              ),
+              div(style = "display: flex; align-items: start; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #F18F01;",
+                HTML("<i class='fa fa-check-double fa-2x' style='color: #F18F01; margin-right: 15px; margin-top: 5px;'></i>"),
+                div(
+                  strong("Uji Asumsi:"), 
+                  p("Pengujian normalitas dan homogenitas dengan berbagai metode", style = "margin: 5px 0 0 0; color: #495057;")
+                )
+              ),
+              div(style = "display: flex; align-items: start; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #A23B72;",
+                HTML("<i class='fa fa-calculator fa-2x' style='color: #A23B72; margin-right: 15px; margin-top: 5px;'></i>"),
+                div(
+                  strong("Statistik Inferensia:"), 
+                  p("Uji t, uji proporsi, uji varians, dan ANOVA", style = "margin: 5px 0 0 0; color: #495057;")
+                )
+              ),
+              div(style = "display: flex; align-items: start; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #C73E1D;",
+                HTML("<i class='fa fa-chart-line fa-2x' style='color: #C73E1D; margin-right: 15px; margin-top: 5px;'></i>"),
+                div(
+                  strong("Regresi Linear:"), 
+                  p("Analisis regresi berganda dengan uji asumsi lengkap", style = "margin: 5px 0 0 0; color: #495057;")
+                )
+              )
+            )
+          )
+        )
+      )
+    ),
+    
+    fluidRow(
+      column(12,
+        div(class = "panel panel-info",
+          div(class = "panel-heading", 
+            HTML("<i class='fa fa-book'></i>"),
+            h4("Panduan Penggunaan", style = "display: inline; margin-left: 10px;")
+          ),
+          div(class = "panel-body",
+            div(style = "display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;",
+              div(style = "text-align: center; padding: 20px;",
+                HTML("<div style='background: linear-gradient(45deg, #2E86AB, #6A994E); color: white; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; font-size: 24px; font-weight: bold;'>1</div>"),
+                h5("Manajemen Data", style = "color: #2E86AB;"),
+                p("Mulai dengan mempersiapkan dataset sesuai kebutuhan analisis", style = "color: #495057;")
+              ),
+              div(style = "text-align: center; padding: 20px;",
+                HTML("<div style='background: linear-gradient(45deg, #6A994E, #F18F01); color: white; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; font-size: 24px; font-weight: bold;'>2</div>"),
+                h5("Eksplorasi Data", style = "color: #6A994E;"),
+                p("Lakukan eksplorasi untuk memahami karakteristik dan distribusi data", style = "color: #495057;")
+              ),
+              div(style = "text-align: center; padding: 20px;",
+                HTML("<div style='background: linear-gradient(45deg, #F18F01, #A23B72); color: white; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; font-size: 24px; font-weight: bold;'>3</div>"),
+                h5("Uji Asumsi", style = "color: #F18F01;"),
+                p("Jalankan uji asumsi sebelum melakukan analisis inferensia", style = "color: #495057;")
+              ),
+              div(style = "text-align: center; padding: 20px;",
+                HTML("<div style='background: linear-gradient(45deg, #A23B72, #C73E1D); color: white; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; font-size: 24px; font-weight: bold;'>4</div>"),
+                h5("Analisis Lanjutan", style = "color: #A23B72;"),
+                p("Pilih metode statistik yang sesuai dengan tujuan penelitian", style = "color: #495057;")
+              )
+            )
+          )
+        )
+      )
+    ),
+    
+    hr(style = "border-color: #2E86AB; border-width: 2px; margin: 40px 0;"),
+    fluidRow(
+      column(12, style = "text-align: center;",
+        div(style = "background: linear-gradient(135deg, white 0%, #f8f9fa 100%); padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);",
+          HTML("<i class='fa fa-download fa-3x' style='color: #2E86AB; margin-bottom: 20px;'></i>"),
+          h4("Download Laporan Lengkap", style = "color: #2C3E50; margin-bottom: 20px;"),
+          downloadButton("download_full_report", 
+                        HTML("<i class='fa fa-file-word'></i> Download Laporan Lengkap (Word)"), 
+                        class = "btn-primary btn-lg", 
+                        style = "padding: 15px 30px; font-size: 16px;")
+        )
+      )
+    )
   ),
   
   # --- 2. Manajemen Data Menu ---
-  tabPanel("Manajemen Data",
-           sidebarLayout(
-             sidebarPanel(
-               h4("Pengaturan Transformasi Data", style = "color: #2c3e50;"),
-               selectInput("variable_categorize", "Pilih Variabel Kontinyu:", choices = NULL),
-               numericInput("num_bins", "Jumlah Kelompok (Bins):", value = 3, min = 2, max = 10),
-               radioButtons("categorization_method", "Metode Kategorisasi:",
-                            choices = list("Quantile-based" = "quantile",
-                                           "Equal-width" = "equal",
-                                           "Custom breaks" = "custom")),
-               conditionalPanel(
-                 condition = "input.categorization_method == 'custom'",
-                 textInput("custom_breaks", "Custom Breaks (pisahkan dengan koma):", 
-                           placeholder = "contoh: 10,20,30")
-               ),
-               hr(),
-               h5("Informasi Variabel Terpilih:"),
-               verbatimTextOutput("variable_info"),
-               hr(),
-               h4("Download", style = "color: #27ae60;"),
-               downloadButton("download_management_jpg", "Download Semua Grafik (JPG)", 
-                              class = "btn-warning", style = "width: 100%; margin-bottom: 10px;"),
-               downloadButton("download_management_report", "Download Laporan Manajemen (Word)", 
-                              class = "btn-success", style = "width: 100%; margin-bottom: 10px;"),
-               downloadButton("download_categorized_table", "Download Tabel Kategorisasi (CSV)", 
-                              class = "btn-info", style = "width: 100%;")
-             ),
-             mainPanel(
-               tabsetPanel(
-                 tabPanel("Hasil Kategorisasi",
-                          h3("Hasil Transformasi Data Kontinyu ke Kategorik"),
-                          p("Transformasi data kontinyu menjadi data kategorik membantu dalam analisis yang memerlukan pengelompokan data."),
-                          hr(),
-                          h4("Tabel Frekuensi Hasil Kategorisasi"),
-                          DTOutput("categorized_table"),
-                          hr(),
-                          h4("Visualisasi Distribusi"),
-                          plotOutput("categorization_plot"),
-                          hr(),
-                          h4("Interpretasi Hasil"),
-                          div(class = "well",
-                              verbatimTextOutput("categorization_interpretation")
-                          )
-                 ),
-                 tabPanel("Perbandingan Data",
-                          h3("Perbandingan Data Asli vs Kategorik"),
-                          fluidRow(
-                            column(6,
-                                   h4("Data Asli (Kontinyu)"),
-                                   plotOutput("original_data_plot")
-                            ),
-                            column(6,
-                                   h4("Data Kategorik"),
-                                   plotOutput("categorized_data_plot")
-                            )
-                          ),
-                          hr(),
-                          h4("Statistik Perbandingan"),
-                          DTOutput("comparison_stats")
-                 )
-               )
-             )
-           )
+  tabPanel(
+    title = HTML("<i class='fa fa-database'></i> Manajemen Data"),
+    value = "management",
+    class = "fade-in",
+    
+    sidebarLayout(
+      sidebarPanel(
+        style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px;",
+        
+        div(style = "text-align: center; margin-bottom: 20px;",
+          HTML("<i class='fa fa-cogs fa-3x' style='color: #2E86AB;'></i>"),
+          h4("Pengaturan Transformasi Data", style = "color: #2C3E50; margin-top: 15px;")
+        ),
+        
+        div(style = "background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;",
+          selectInput("variable_categorize", 
+                     HTML("<i class='fa fa-chart-bar'></i> Pilih Variabel Kontinyu:"), 
+                     choices = NULL,
+                     width = "100%"),
+          
+          numericInput("num_bins", 
+                      HTML("<i class='fa fa-layer-group'></i> Jumlah Kelompok (Bins):"), 
+                      value = 3, min = 2, max = 10,
+                      width = "100%"),
+          
+          radioButtons("categorization_method", 
+                      HTML("<i class='fa fa-tools'></i> Metode Kategorisasi:"),
+                      choices = list("Quantile-based" = "quantile",
+                                    "Equal-width" = "equal",
+                                    "Custom breaks" = "custom"),
+                      selected = "quantile"),
+          
+          conditionalPanel(
+            condition = "input.categorization_method == 'custom'",
+            textInput("custom_breaks", 
+                     HTML("<i class='fa fa-edit'></i> Custom Breaks (pisahkan dengan koma):"), 
+                     placeholder = "contoh: 10,20,30",
+                     width = "100%")
+          )
+        ),
+        
+        hr(style = "border-color: #2E86AB;"),
+        
+        div(style = "background: #e3f2fd; padding: 15px; border-radius: 8px; margin-bottom: 20px;",
+          h5(HTML("<i class='fa fa-info-circle'></i> Informasi Variabel Terpilih:"), 
+             style = "color: #2E86AB;"),
+          verbatimTextOutput("variable_info")
+        ),
+        
+        hr(style = "border-color: #2E86AB;"),
+        
+        div(style = "text-align: center;",
+          h4(HTML("<i class='fa fa-download'></i> Download"), 
+             style = "color: #27ae60; margin-bottom: 20px;"),
+          
+          downloadButton("download_management_jpg", 
+                        HTML("<i class='fa fa-image'></i> Download Semua Grafik (JPG)"), 
+                        class = "btn-warning", 
+                        style = "width: 100%; margin-bottom: 10px; padding: 12px;"),
+          
+          downloadButton("download_management_report", 
+                        HTML("<i class='fa fa-file-word'></i> Download Laporan Manajemen (Word)"), 
+                        class = "btn-success", 
+                        style = "width: 100%; margin-bottom: 10px; padding: 12px;"),
+          
+          downloadButton("download_categorized_table", 
+                        HTML("<i class='fa fa-table'></i> Download Tabel Kategorisasi (CSV)"), 
+                        class = "btn-info", 
+                        style = "width: 100%; padding: 12px;")
+        )
+      ),
+      
+      mainPanel(
+        tabsetPanel(
+          id = "management_tabs",
+          
+          tabPanel(
+            title = HTML("<i class='fa fa-chart-pie'></i> Hasil Kategorisasi"),
+            
+            div(style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 25px; margin-bottom: 20px;",
+              h3(HTML("<i class='fa fa-transform'></i> Hasil Transformasi Data Kontinyu ke Kategorik"), 
+                 style = "color: #2E86AB; border-bottom: 3px solid #2E86AB; padding-bottom: 10px;"),
+              p("Transformasi data kontinyu menjadi data kategorik membantu dalam analisis yang memerlukan pengelompokan data.", 
+                style = "font-size: 16px; color: #495057; margin-bottom: 25px;")
+            ),
+            
+            div(style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 25px; margin-bottom: 20px;",
+              h4(HTML("<i class='fa fa-table'></i> Tabel Frekuensi Hasil Kategorisasi"), 
+                 style = "color: #2E86AB; margin-bottom: 20px;"),
+              DTOutput("categorized_table")
+            ),
+            
+            div(style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 25px; margin-bottom: 20px;",
+              h4(HTML("<i class='fa fa-chart-column'></i> Visualisasi Distribusi"), 
+                 style = "color: #2E86AB; margin-bottom: 20px;"),
+              plotOutput("categorization_plot")
+            ),
+            
+            div(class = "well",
+              style = "background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-left: 4px solid #2E86AB;",
+              h4(HTML("<i class='fa fa-lightbulb'></i> Interpretasi Hasil"), 
+                 style = "color: #2E86AB;"),
+              verbatimTextOutput("categorization_interpretation")
+            )
+          ),
+          
+          tabPanel(
+            title = HTML("<i class='fa fa-exchange-alt'></i> Perbandingan Data"),
+            
+            div(style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 25px; margin-bottom: 20px;",
+              h3(HTML("<i class='fa fa-balance-scale'></i> Perbandingan Data Asli vs Kategorik"), 
+                 style = "color: #2E86AB; border-bottom: 3px solid #2E86AB; padding-bottom: 10px;")
+            ),
+            
+            fluidRow(
+              column(6,
+                div(style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; margin-bottom: 20px;",
+                  h4(HTML("<i class='fa fa-wave-square'></i> Data Asli (Kontinyu)"), 
+                     style = "color: #6A994E; text-align: center;"),
+                  plotOutput("original_data_plot")
+                )
+              ),
+              column(6,
+                div(style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; margin-bottom: 20px;",
+                  h4(HTML("<i class='fa fa-layer-group'></i> Data Kategorik"), 
+                     style = "color: #F18F01; text-align: center;"),
+                  plotOutput("categorized_data_plot")
+                )
+              )
+            ),
+            
+            div(style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 25px;",
+              h4(HTML("<i class='fa fa-chart-line'></i> Statistik Perbandingan"), 
+                 style = "color: #2E86AB; margin-bottom: 20px;"),
+              DTOutput("comparison_stats")
+            )
+          )
+        )
+      )
+    )
   ),
   
   # --- 3. Eksplorasi Data Menu ---
-  tabPanel("Eksplorasi Data",
-           sidebarLayout(
-             sidebarPanel(
-               h4("Pengaturan Eksplorasi", style = "color: #2c3e50;"),
-               selectInput("variable_explore", "Pilih Variabel:", choices = NULL),
-               checkboxInput("show_outliers", "Tampilkan Outliers", value = TRUE),
-               sliderInput("plot_bins", "Jumlah Bins (Histogram):", min = 10, max = 50, value = 30),
-               hr(),
-               h4("Filter Data (Opsional)"),
-               checkboxInput("enable_filter", "Aktifkan Filter", value = FALSE),
-               conditionalPanel(
-                 condition = "input.enable_filter == true",
-                 selectInput("filter_variable", "Variabel Filter:", choices = NULL),
-                 uiOutput("filter_values")
-               ),
-               hr(),
-               h4("Download", style = "color: #27ae60;"),
-               downloadButton("download_explore_plot", "Download Grafik (JPG)", 
-                              class = "btn-info", style = "width: 100%; margin-bottom: 10px;"),
-               downloadButton("download_explore_report", "Download Laporan Eksplorasi (Word)", 
-                              class = "btn-success", style = "width: 100%;")
-             ),
-             mainPanel(
-               tabsetPanel(
-                 id = "explore_tabs",
+  tabPanel(
+    title = HTML("<i class='fa fa-search'></i> Eksplorasi Data"),
+    value = "exploration",
+    class = "fade-in",
+    
+    sidebarLayout(
+      sidebarPanel(
+        style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px;",
+        
+        div(style = "text-align: center; margin-bottom: 20px;",
+          HTML("<i class='fa fa-search fa-3x' style='color: #6A994E;'></i>"),
+          h4("Pengaturan Eksplorasi", style = "color: #2C3E50; margin-top: 15px;")
+        ),
+        
+        div(style = "background: #f0f8ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #6A994E;",
+          selectInput("variable_explore", 
+                     HTML("<i class='fa fa-chart-bar'></i> Pilih Variabel:"), 
+                     choices = NULL,
+                     width = "100%"),
+          
+          div(style = "display: flex; align-items: center; margin: 15px 0;",
+            checkboxInput("show_outliers", "", value = TRUE),
+            HTML("<span style='margin-left: 10px;'><i class='fa fa-exclamation-triangle' style='color: #F18F01;'></i> <strong>Tampilkan Outliers</strong></span>")
+          ),
+          
+          div(style = "margin: 15px 0;",
+            HTML("<label style='font-weight: 600; color: #2C3E50;'><i class='fa fa-sliders-h'></i> Jumlah Bins (Histogram):</label>"),
+            sliderInput("plot_bins", "", min = 10, max = 50, value = 30, width = "100%")
+          )
+        ),
+        
+        hr(style = "border-color: #6A994E; margin: 20px 0;"),
+        
+        div(style = "background: #fff3cd; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #F18F01;",
+          h5(HTML("<i class='fa fa-filter'></i> Filter Data (Opsional)"), 
+             style = "color: #2C3E50; margin-bottom: 15px;"),
+          
+          div(style = "display: flex; align-items: center; margin-bottom: 15px;",
+            checkboxInput("enable_filter", "", value = FALSE),
+            HTML("<span style='margin-left: 10px;'><strong>Aktifkan Filter</strong></span>")
+          ),
+          
+          conditionalPanel(
+            condition = "input.enable_filter == true",
+            selectInput("filter_variable", 
+                       HTML("<i class='fa fa-funnel-dollar'></i> Variabel Filter:"), 
+                       choices = NULL,
+                       width = "100%"),
+            uiOutput("filter_values")
+          )
+        ),
+        
+        hr(style = "border-color: #6A994E; margin: 20px 0;"),
+        
+        div(style = "text-align: center;",
+          h4(HTML("<i class='fa fa-download'></i> Download"), 
+             style = "color: #27ae60; margin-bottom: 20px;"),
+          
+          downloadButton("download_explore_plot", 
+                        HTML("<i class='fa fa-image'></i> Download Grafik (JPG)"), 
+                        class = "btn-info", 
+                        style = "width: 100%; margin-bottom: 10px; padding: 12px;"),
+          
+          downloadButton("download_explore_report", 
+                        HTML("<i class='fa fa-file-word'></i> Download Laporan Eksplorasi (Word)"), 
+                        class = "btn-success", 
+                        style = "width: 100%; padding: 12px;")
+        )
+      ),
+      mainPanel(
+        tabsetPanel(
+          id = "explore_tabs",
+          
+          tabPanel(
+            title = HTML("<i class='fa fa-chart-bar'></i> Statistik Deskriptif"),
+            
+            div(style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 25px; margin-bottom: 20px;",
+              h3(HTML("<i class='fa fa-analytics'></i> Analisis Statistik Deskriptif"), 
+                 style = "color: #6A994E; border-bottom: 3px solid #6A994E; padding-bottom: 10px;")
+            ),
+            
+            fluidRow(
+              column(6,
+                div(class = "panel panel-default",
+                  style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); margin-bottom: 20px;",
+                  div(class = "panel-heading", 
+                    style = "background: linear-gradient(45deg, #6A994E, #F18F01); color: white; border-radius: 8px 8px 0 0;",
+                    h4(HTML("<i class='fa fa-list'></i> Ringkasan Statistik"), style = "margin: 0;")
+                  ),
+                  div(class = "panel-body", style = "padding: 20px;",
+                    verbatimTextOutput("summary_stats")
+                  )
+                )
+              ),
+              column(6,
+                div(class = "panel panel-default",
+                  style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); margin-bottom: 20px;",
+                  div(class = "panel-heading", 
+                    style = "background: linear-gradient(45deg, #F18F01, #A23B72); color: white; border-radius: 8px 8px 0 0;",
+                    h4(HTML("<i class='fa fa-plus-circle'></i> Statistik Tambahan"), style = "margin: 0;")
+                  ),
+                  div(class = "panel-body", style = "padding: 20px;",
+                    verbatimTextOutput("additional_stats")
+                  )
+                )
+              )
+            ),
+            
+            div(class = "well",
+              style = "background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-left: 4px solid #6A994E; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);",
+              h4(HTML("<i class='fa fa-lightbulb'></i> Interpretasi Statistik Deskriptif"), 
+                 style = "color: #6A994E;"),
+              verbatimTextOutput("descriptive_interpretation")
+            )
+          ),
                  
-                 tabPanel("Statistik Deskriptif",
-                          h3("Analisis Statistik Deskriptif"),
-                          fluidRow(
-                            column(6,
-                                   div(class = "panel panel-default",
-                                       div(class = "panel-heading", h4("Ringkasan Statistik")),
-                                       div(class = "panel-body",
-                                           verbatimTextOutput("summary_stats")
-                                       )
-                                   )
-                            ),
-                            column(6,
-                                   div(class = "panel panel-default",
-                                       div(class = "panel-heading", h4("Statistik Tambahan")),
-                                       div(class = "panel-body",
-                                           verbatimTextOutput("additional_stats")
-                                       )
-                                   )
-                            )
-                          ),
-                          hr(),
-                          div(class = "well",
-                              h4("Interpretasi Statistik Deskriptif"),
-                              verbatimTextOutput("descriptive_interpretation")
-                          )
-                 ),
+          tabPanel(
+            title = HTML("<i class='fa fa-chart-line'></i> Visualisasi Data"),
+            
+            div(style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 25px; margin-bottom: 20px;",
+              h3(HTML("<i class='fa fa-chart-area'></i> Visualisasi dan Analisis Grafik"), 
+                 style = "color: #A23B72; border-bottom: 3px solid #A23B72; padding-bottom: 10px;")
+            ),
+            
+            fluidRow(
+              column(6,
+                div(style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; margin-bottom: 20px;",
+                  h4(HTML("<i class='fa fa-chart-column'></i> Histogram & Density Plot"), 
+                     style = "color: #6A994E; text-align: center; margin-bottom: 20px;"),
+                  plotlyOutput("histogram_plot")
+                )
+              ),
+              column(6,
+                div(style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; margin-bottom: 20px;",
+                  h4(HTML("<i class='fa fa-box'></i> Box Plot"), 
+                     style = "color: #F18F01; text-align: center; margin-bottom: 20px;"),
+                  plotlyOutput("boxplot")
+                )
+              )
+            ),
+            
+            fluidRow(
+              column(6,
+                div(style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; margin-bottom: 20px;",
+                  h4(HTML("<i class='fa fa-question-circle'></i> Q-Q Plot (Normalitas)"), 
+                     style = "color: #A23B72; text-align: center; margin-bottom: 20px;"),
+                  plotOutput("qq_plot")
+                )
+              ),
+              column(6,
+                div(style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; margin-bottom: 20px;",
+                  h4(HTML("<i class='fa fa-project-diagram'></i> Scatter Plot Matrix (Sample)"), 
+                     style = "color: #C73E1D; text-align: center; margin-bottom: 20px;"),
+                  plotOutput("scatter_matrix")
+                )
+              )
+            ),
+            
+            div(class = "well",
+              style = "background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-left: 4px solid #A23B72; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);",
+              h4(HTML("<i class='fa fa-lightbulb'></i> Interpretasi Visualisasi"), 
+                 style = "color: #A23B72;"),
+              verbatimTextOutput("visualization_interpretation")
+            )
+          ),
                  
-                 tabPanel("Visualisasi Data",
-                          h3("Visualisasi dan Analisis Grafik"),
-                          fluidRow(
-                            column(6,
-                                   h4("Histogram & Density Plot"),
-                                   plotlyOutput("histogram_plot")
-                            ),
-                            column(6,
-                                   h4("Box Plot"),
-                                   plotlyOutput("boxplot")
-                            )
-                          ),
-                          hr(),
-                          fluidRow(
-                            column(6,
-                                   h4("Q-Q Plot (Normalitas)"),
-                                   plotOutput("qq_plot")
-                            ),
-                            column(6,
-                                   h4("Scatter Plot Matrix (Sample)"),
-                                   plotOutput("scatter_matrix")
-                            )
-                          ),
-                          hr(),
-                          div(class = "well",
-                              h4("Interpretasi Visualisasi"),
-                              verbatimTextOutput("visualization_interpretation")
-                          )
-                 ),
-                 
-                 tabPanel("Peta Geografis",
-                          h3("Visualisasi Peta Indonesia - Semua 511 Kabupaten/Kota"),
-                          div(class = "alert alert-info",
-                              h4("Informasi Peta"),
-                              p("Peta menampilkan distribusi data untuk semua 511 kabupaten/kota di Indonesia berdasarkan koordinat geografis yang tersedia.")
-                          ),
-                          leafletOutput("map_plot", height = "600px"),
-                          hr(),
-                          h4("Tabel Data Geografis"),
-                          DTOutput("geo_data_table")
-                 ),
-                 
-                 tabPanel("Tabel Data",
-                          h3("Tabel Data Lengkap"),
-                          p("Tabel interaktif dengan fitur pencarian, sorting, dan filtering."),
-                          DTOutput("data_table"),
-                          hr(),
-                          downloadButton("download_data_table", "Download Tabel Data (CSV)", 
-                                         class = "btn-info")
+          tabPanel(
+            title = HTML("<i class='fa fa-map-marked-alt'></i> Peta Geografis"),
+            
+            div(style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 25px; margin-bottom: 20px;",
+              h3(HTML("<i class='fa fa-globe-asia'></i> Visualisasi Peta Indonesia - Semua 511 Kabupaten/Kota"), 
+                 style = "color: #2E86AB; border-bottom: 3px solid #2E86AB; padding-bottom: 10px;")
+            ),
+            
+            div(class = "alert alert-info",
+              style = "background: linear-gradient(45deg, rgba(46, 134, 171, 0.1), rgba(106, 153, 78, 0.1)); border: none; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);",
+              h4(HTML("<i class='fa fa-info-circle'></i> Informasi Peta"), 
+                 style = "color: #2E86AB;"),
+              p("Peta menampilkan distribusi data untuk semua 511 kabupaten/kota di Indonesia berdasarkan koordinat geografis yang tersedia.", 
+                style = "margin: 0; color: #495057;")
+            ),
+            
+            div(style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 15px; margin-bottom: 20px;",
+              leafletOutput("map_plot", height = "600px")
+            ),
+            
+            div(style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 25px;",
+              h4(HTML("<i class='fa fa-table'></i> Tabel Data Geografis"), 
+                 style = "color: #2E86AB; margin-bottom: 20px;"),
+              DTOutput("geo_data_table")
+            )
+          ),
+          
+          tabPanel(
+            title = HTML("<i class='fa fa-table'></i> Tabel Data"),
+            
+            div(style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 25px; margin-bottom: 20px;",
+              h3(HTML("<i class='fa fa-database'></i> Tabel Data Lengkap"), 
+                 style = "color: #C73E1D; border-bottom: 3px solid #C73E1D; padding-bottom: 10px;"),
+              p("Tabel interaktif dengan fitur pencarian, sorting, dan filtering.", 
+                style = "font-size: 16px; color: #495057; margin-bottom: 0;")
+            ),
+            
+            div(style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 25px; margin-bottom: 20px;",
+              DTOutput("data_table")
+            ),
+            
+            div(style = "text-align: center;",
+              downloadButton("download_data_table", 
+                            HTML("<i class='fa fa-download'></i> Download Tabel Data (CSV)"), 
+                            class = "btn-info",
+                            style = "padding: 12px 30px; font-size: 16px;")
+            )
+          )
                  )
-               )
-             )
-           )
-  ),
+       )
+     )
+   ),
   
-  # --- 4. Uji Asumsi Data Menu ---
-  tabPanel("Uji Asumsi Data",
-           sidebarLayout(
-             sidebarPanel(
-               h4("Pengaturan Uji Asumsi", style = "color: #2c3e50;"),
-               selectInput("assumption_variable", "Pilih Variabel:", choices = NULL),
-               selectInput("grouping_variable", "Variabel Pengelompokan (Opsional):", 
-                           choices = c("Tidak ada" = "none"), selected = "none"),
-               hr(),
-               h4("Pilih Uji yang Akan Dilakukan"),
-               checkboxGroupInput("selected_tests", "Uji Asumsi:",
-                                  choices = list(
-                                    "Uji Normalitas (Shapiro-Wilk)" = "shapiro",
-                                    "Uji Normalitas (Kolmogorov-Smirnov)" = "ks",
-                                    "Uji Normalitas (Anderson-Darling)" = "ad",
-                                    "Uji Homogenitas (Levene)" = "levene",
-                                    "Uji Homogenitas (Bartlett)" = "bartlett"
-                                  ),
-                                  selected = c("shapiro", "levene")),
-               hr(),
-               h4("Download", style = "color: #27ae60;"),
-               downloadButton("download_assumption_jpg", "Download Semua Grafik (JPG)", 
-                              class = "btn-warning", style = "width: 100%; margin-bottom: 10px;"),
-               downloadButton("download_assumption_report", "Download Laporan Uji Asumsi (Word)", 
-                              class = "btn-success", style = "width: 100%;")
-             ),
+     # --- 4. Uji Asumsi Data Menu ---
+   tabPanel(
+     title = HTML("<i class='fa fa-check-double'></i> Uji Asumsi Data"),
+     value = "assumptions",
+     class = "fade-in",
+     
+     sidebarLayout(
+       sidebarPanel(
+         style = "background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px;",
+         
+         div(style = "text-align: center; margin-bottom: 20px;",
+           HTML("<i class='fa fa-check-double fa-3x' style='color: #F18F01;'></i>"),
+           h4("Pengaturan Uji Asumsi", style = "color: #2C3E50; margin-top: 15px;")
+         ),
+         
+         div(style = "background: #fff3cd; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #F18F01;",
+           selectInput("assumption_variable", 
+                      HTML("<i class='fa fa-chart-bar'></i> Pilih Variabel:"), 
+                      choices = NULL,
+                      width = "100%"),
+           
+           selectInput("grouping_variable", 
+                      HTML("<i class='fa fa-layer-group'></i> Variabel Pengelompokan (Opsional):"), 
+                      choices = c("Tidak ada" = "none"), 
+                      selected = "none",
+                      width = "100%"),
+                         ),
+          
+          hr(style = "border-color: #F18F01; margin: 20px 0;"),
+          
+          div(style = "background: #e3f2fd; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #2E86AB;",
+            h5(HTML("<i class='fa fa-tasks'></i> Pilih Uji yang Akan Dilakukan"), 
+               style = "color: #2C3E50; margin-bottom: 15px;"),
+            
+            checkboxGroupInput("selected_tests", "",
+                               choices = list(
+                                 "Uji Normalitas (Shapiro-Wilk)" = "shapiro",
+                                 "Uji Normalitas (Kolmogorov-Smirnov)" = "ks",
+                                 "Uji Normalitas (Anderson-Darling)" = "ad",
+                                 "Uji Homogenitas (Levene)" = "levene",
+                                 "Uji Homogenitas (Bartlett)" = "bartlett"
+                               ),
+                               selected = c("shapiro", "levene"))
+          ),
+          
+          hr(style = "border-color: #F18F01; margin: 20px 0;"),
+          
+          div(style = "text-align: center;",
+            h4(HTML("<i class='fa fa-download'></i> Download"), 
+               style = "color: #27ae60; margin-bottom: 20px;"),
+            
+            downloadButton("download_assumption_jpg", 
+                          HTML("<i class='fa fa-image'></i> Download Semua Grafik (JPG)"), 
+                          class = "btn-warning", 
+                          style = "width: 100%; margin-bottom: 10px; padding: 12px;"),
+            
+            downloadButton("download_assumption_report", 
+                          HTML("<i class='fa fa-file-word'></i> Download Laporan Uji Asumsi (Word)"), 
+                          class = "btn-success", 
+                          style = "width: 100%; padding: 12px;")
+          )
+        ),
              mainPanel(
                tabsetPanel(
                  tabPanel("Uji Normalitas",
