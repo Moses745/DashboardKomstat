@@ -49,9 +49,20 @@ body {
   padding: 0 !important;
 }
 
-/* Ensure all text is visible */
+/* Ensure all text is visible - EXCEPT navbar which should be white */
 p, span, div, h1, h2, h3, h4, h5, h6, label, li {
   color: inherit !important;
+}
+
+/* Navbar exclusion from global text rules */
+.navbar p, 
+.navbar span, 
+.navbar div, 
+.navbar h1, .navbar h2, .navbar h3, .navbar h4, .navbar h5, .navbar h6, 
+.navbar label, 
+.navbar li,
+.navbar a {
+  color: white !important;
 }
 
 .jumbotron p {
@@ -426,22 +437,59 @@ ul li, ol li {
   color: inherit !important;
 }
 
-/* Fix navbar menu text visibility */
-.navbar-nav a, .navbar-brand {
+/* Special override for navbar icons */
+.navbar .fa, 
+.navbar .fas, 
+.navbar .far, 
+.navbar .fab {
+  color: white !important;
+}
+
+/* Fix navbar menu text visibility - FORCE ALL TEXT TO BE VISIBLE */
+.navbar-brand, 
+.navbar-brand:hover, 
+.navbar-brand:focus {
   color: white !important;
   opacity: 1 !important;
   text-decoration: none !important;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3) !important;
 }
 
-.navbar-nav li a {
+.navbar-nav a, 
+.navbar-nav li a,
+.navbar-nav > li > a,
+.navbar-nav > li > a:hover,
+.navbar-nav > li > a:focus {
   color: white !important;
   font-weight: 600 !important;
   padding: 10px 15px !important;
+  opacity: 1 !important;
+  text-decoration: none !important;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
 }
 
-/* Remove any conflicting styles */
-.navbar-default .navbar-nav > li > a {
+/* Override any Bootstrap defaults */
+.navbar-default .navbar-nav > li > a,
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus,
+.navbar-default .navbar-brand,
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
   color: white !important;
+  background-color: transparent !important;
+}
+
+/* Force visibility for all navbar text */
+.navbar * {
+  color: white !important;
+}
+
+/* Active tab styling */
+.navbar-nav > .active > a,
+.navbar-nav > .active > a:hover,
+.navbar-nav > .active > a:focus {
+  color: white !important;
+  background-color: rgba(255,255,255,0.3) !important;
 }
 
 /* Compact layout fixes */
@@ -466,6 +514,64 @@ ul li, ol li {
 /* Content spacing */
 .container-fluid > .row:first-child {
   margin-top: 0 !important;
+}
+
+/* ULTIMATE NAVBAR TEXT VISIBILITY FIX */
+nav.navbar a,
+nav.navbar span,
+nav.navbar div,
+.navbar-header a,
+.navbar-collapse a,
+.navbar-nav li a span,
+.navbar-brand span,
+.navbar-brand i {
+  color: white !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
+}
+
+/* Ensure icons in navbar are visible */
+.navbar .fa,
+.navbar .fas,
+.navbar .far,
+.navbar .fab,
+.navbar i {
+  color: white !important;
+  opacity: 1 !important;
+}
+
+/* Override any inherited transparency */
+.navbar-nav > li > a,
+.navbar-nav > li > a > i,
+.navbar-nav > li > a > span {
+  color: white !important;
+  opacity: 1 !important;
+  background: none !important;
+  -webkit-text-fill-color: white !important;
+  text-fill-color: white !important;
+}
+
+/* FINAL NAVBAR VISIBILITY FIX - HIGHEST SPECIFICITY */
+body .navbar-default .navbar-nav > li > a,
+body .navbar-default .navbar-brand,
+body .navbar .navbar-nav li a,
+body .navbar .navbar-brand,
+html body .navbar a,
+html body .navbar span,
+html body .navbar {
+  color: white !important;
+  opacity: 1 !important;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
+  -webkit-text-fill-color: white !important;
+  visibility: visible !important;
+}
+
+/* Override any CSS that might make text transparent */
+.navbar * {
+  -webkit-text-fill-color: white !important;
+  text-fill-color: white !important;
+  color: white !important;
 }
 </style>
 "
