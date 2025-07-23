@@ -62,39 +62,40 @@ p, span, div, h1, h2, h3, h4, h5, h6, label, li {
 .navbar label, 
 .navbar li,
 .navbar a {
-  color: white !important;
+  color: #2C3E50 !important;
 }
 
 .jumbotron p {
   color: #495057 !important;
 }
 
-/* Navigation bar styling */
+/* Navigation bar styling - BLACK TEXT FOR VISIBILITY */
 .navbar {
-  background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%) !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
   border: none !important;
   box-shadow: var(--card-shadow);
   margin-bottom: 0 !important;
   border-radius: 0 !important;
+  border-bottom: 3px solid var(--primary-color) !important;
 }
 
 .navbar-brand {
   font-weight: 700 !important;
   font-size: 1.4em !important;
-  color: white !important;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  color: #2C3E50 !important;
+  text-shadow: none !important;
 }
 
 .navbar-nav > li > a {
-  color: white !important;
+  color: #2C3E50 !important;
   font-weight: 600 !important;
   transition: all 0.3s ease;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+  text-shadow: none !important;
 }
 
 .navbar-nav > li > a:hover {
-  color: white !important;
-  background-color: rgba(255,255,255,0.2) !important;
+  color: var(--primary-color) !important;
+  background-color: rgba(46, 134, 171, 0.1) !important;
   border-radius: 4px;
   transform: translateY(-1px);
 }
@@ -102,7 +103,7 @@ p, span, div, h1, h2, h3, h4, h5, h6, label, li {
 .navbar-nav > li.active > a,
 .navbar-nav > li.active > a:hover,
 .navbar-nav > li.active > a:focus {
-  background-color: rgba(255,255,255,0.3) !important;
+  background-color: var(--primary-color) !important;
   color: white !important;
   border-radius: 4px;
 }
@@ -442,46 +443,58 @@ ul li, ol li {
 .navbar .fas, 
 .navbar .far, 
 .navbar .fab {
-  color: white !important;
+  color: #2C3E50 !important;
 }
 
-/* Fix navbar menu text visibility - FORCE ALL TEXT TO BE VISIBLE */
+/* Fix navbar menu text visibility - BLACK TEXT FOR CLARITY */
 .navbar-brand, 
 .navbar-brand:hover, 
 .navbar-brand:focus {
-  color: white !important;
+  color: #2C3E50 !important;
   opacity: 1 !important;
   text-decoration: none !important;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.3) !important;
+  text-shadow: none !important;
 }
 
 .navbar-nav a, 
 .navbar-nav li a,
-.navbar-nav > li > a,
-.navbar-nav > li > a:hover,
-.navbar-nav > li > a:focus {
-  color: white !important;
+.navbar-nav > li > a {
+  color: #2C3E50 !important;
   font-weight: 600 !important;
   padding: 10px 15px !important;
   opacity: 1 !important;
   text-decoration: none !important;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
+  text-shadow: none !important;
+}
+
+.navbar-nav > li > a:hover,
+.navbar-nav > li > a:focus {
+  color: var(--primary-color) !important;
+  font-weight: 600 !important;
+  padding: 10px 15px !important;
+  opacity: 1 !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
 }
 
 /* Override any Bootstrap defaults */
 .navbar-default .navbar-nav > li > a,
+.navbar-default .navbar-brand {
+  color: #2C3E50 !important;
+  background-color: transparent !important;
+}
+
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus,
-.navbar-default .navbar-brand,
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {
-  color: white !important;
+  color: var(--primary-color) !important;
   background-color: transparent !important;
 }
 
 /* Force visibility for all navbar text */
 .navbar * {
-  color: white !important;
+  color: #2C3E50 !important;
 }
 
 /* Active tab styling */
@@ -489,7 +502,7 @@ ul li, ol li {
 .navbar-nav > .active > a:hover,
 .navbar-nav > .active > a:focus {
   color: white !important;
-  background-color: rgba(255,255,255,0.3) !important;
+  background-color: var(--primary-color) !important;
 }
 
 /* Compact layout fixes */
@@ -516,7 +529,7 @@ ul li, ol li {
   margin-top: 0 !important;
 }
 
-/* ULTIMATE NAVBAR TEXT VISIBILITY FIX */
+/* ULTIMATE NAVBAR TEXT VISIBILITY FIX - BLACK TEXT */
 nav.navbar a,
 nav.navbar span,
 nav.navbar div,
@@ -525,10 +538,10 @@ nav.navbar div,
 .navbar-nav li a span,
 .navbar-brand span,
 .navbar-brand i {
-  color: white !important;
+  color: #2C3E50 !important;
   opacity: 1 !important;
   visibility: visible !important;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
+  text-shadow: none !important;
 }
 
 /* Ensure icons in navbar are visible */
@@ -537,7 +550,7 @@ nav.navbar div,
 .navbar .far,
 .navbar .fab,
 .navbar i {
-  color: white !important;
+  color: #2C3E50 !important;
   opacity: 1 !important;
 }
 
@@ -545,14 +558,14 @@ nav.navbar div,
 .navbar-nav > li > a,
 .navbar-nav > li > a > i,
 .navbar-nav > li > a > span {
-  color: white !important;
+  color: #2C3E50 !important;
   opacity: 1 !important;
   background: none !important;
-  -webkit-text-fill-color: white !important;
-  text-fill-color: white !important;
+  -webkit-text-fill-color: #2C3E50 !important;
+  text-fill-color: #2C3E50 !important;
 }
 
-/* FINAL NAVBAR VISIBILITY FIX - HIGHEST SPECIFICITY */
+/* FINAL NAVBAR VISIBILITY FIX - HIGHEST SPECIFICITY - BLACK TEXT */
 body .navbar-default .navbar-nav > li > a,
 body .navbar-default .navbar-brand,
 body .navbar .navbar-nav li a,
@@ -560,18 +573,26 @@ body .navbar .navbar-brand,
 html body .navbar a,
 html body .navbar span,
 html body .navbar {
-  color: white !important;
+  color: #2C3E50 !important;
   opacity: 1 !important;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
-  -webkit-text-fill-color: white !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: #2C3E50 !important;
   visibility: visible !important;
 }
 
 /* Override any CSS that might make text transparent */
 .navbar * {
-  -webkit-text-fill-color: white !important;
-  text-fill-color: white !important;
+  -webkit-text-fill-color: #2C3E50 !important;
+  text-fill-color: #2C3E50 !important;
+  color: #2C3E50 !important;
+}
+
+/* Special case for active menu item - keep white text on blue background */
+.navbar-nav > .active > a *,
+.navbar-nav > .active > a:hover *,
+.navbar-nav > .active > a:focus * {
   color: white !important;
+  -webkit-text-fill-color: white !important;
 }
 </style>
 "
